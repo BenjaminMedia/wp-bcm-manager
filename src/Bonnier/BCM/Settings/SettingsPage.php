@@ -31,13 +31,13 @@ class SettingsPage {
 			'type' => 'checkbox',
 			'name' => 'Enabled',
 		],
-		'brand' => [
-			'type' => 'text',
-			'name' => 'Brand',
-		],
 		'type' => [
 			'type' => 'text',
 			'name' => 'Type ("site", "app", "blog", "shop")',
+		],
+		'brand' => [
+			'type' => 'text',
+			'name' => 'Brand',
 		],
 		'sub' => [
 			'type' => 'text',
