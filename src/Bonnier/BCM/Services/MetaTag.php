@@ -37,34 +37,49 @@ class MetaTag {
 	public static function add_head_tags() {
 		
 		if (self::$objSettings->enabled) {
-			
+
 			// add mandatory tags
 			$arrTags = [
 				'bcm-brand' => self::$objSettings->brand,
 				'bcm-country' => self::$objSettings->country,
 				'bcm-type' => self::$objSettings->type
 			];
-			
+
 			// add tablet breaking point
 			if (self::$objSettings->tablet_breakpoint) {
 				$arrTags['bcm-tablet-breakpoint'] = self::$objSettings->tablet_breakpoint;
 			}
-			
+
 			// add mobile breaking point
 			if (self::$objSettings->mobile_breakpoint) {
 				$arrTags['bcm-mobile-breakpoint'] = self::$objSettings->mobile_breakpoint;
 			}
-			
+
+			// set content type
+			if ($strContentType = self::get_bcm_content_type()) {
+				$arrArticleTags['bcm-content-type'] = $strContentType;
+			}
+
+			// set advertorial type
+			if ($strAdvertorialType = self::get_bcm_advertorial_type()) {
+				$arrArticleTags['bcm-advertorial-type'] = $strAdvertorialType;
+			}
+
+			// set advertorial label
+			if ($strAdvertorialLabel = self::get_bcm_advertorial_label()) {
+				$arrArticleTags['bcm-advertorial-label'] = $strAdvertorialLabel;
+			}
+
 			// we only apply article tags when necessary
 			if (!is_front_page() && (is_singular() || is_single())) {
 				$arrTags = array_merge($arrTags, self::get_article_tags());
 			}
-			
+
 			// add subcategory tag by overwriting if present
 			if (self::$objSettings->sub) {
 				$arrTags['bcm-sub'] = self::$objSettings->sub;
 			}
-			
+
 			// write the actual tags
 			self::write_meta_tags($arrTags);
 		}
@@ -80,11 +95,6 @@ class MetaTag {
 			'bcm-title' => self::get_bcm_title()
 		];
 
-		// set content type
-		if ($strContentType = self::get_bcm_content_type()) {
-			$arrArticleTags['bcm-content-type'] = $strContentType;
-		}
-		
 		// set main category
 		if ($strMainCategory = self::get_article_category()) {
 			$arrArticleTags['bcm-sub'] = $strMainCategory;
@@ -99,17 +109,7 @@ class MetaTag {
 		if ($arrTags = self::get_bcm_tags()) {
 			$arrArticleTags['bcm-tags'] = implode(',', $arrTags);
 		}
-		
-		// set advertorial type
-		if ($strAdvertorialType = self::get_bcm_advertorial_type()) {
-			$arrArticleTags['bcm-advertorial-type'] = $strAdvertorialType;
-		}
-		
-		// set advertorial label
-		if ($strAdvertorialLabel = self::get_bcm_advertorial_label()) {
-			$arrArticleTags['bcm-advertorial-label'] = $strAdvertorialLabel;
-		}
-		
+
 		return $arrArticleTags;
 	}
 	
