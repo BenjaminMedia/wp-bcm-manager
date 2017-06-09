@@ -41,7 +41,7 @@ class SettingsPage {
 		],
 		'sub' => [
 			'type' => 'text',
-			'name' => 'Sub',
+			'name' => 'Sub (this overwrites default value (top category))',
 		],
 		'tablet_breakpoint' => [
 			'type' => 'text',

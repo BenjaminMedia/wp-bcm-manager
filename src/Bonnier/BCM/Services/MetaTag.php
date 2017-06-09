@@ -214,7 +214,7 @@ class MetaTag {
 	 * @param integer $intCategoryId
 	 * @return string
 	 */
-	private function get_top_category($intCategoryId) {
+	private static function get_top_category($intCategoryId) {
 		$strTopName = null;
 
 		while ($intCategoryId) {
