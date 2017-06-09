@@ -1,0 +1,24 @@
+{
+	"name": "benjaminmedia/wp-bcm-manager",
+	"description": "BCM manager",
+	"type": "wordpress-plugin",
+	"keywords": ["wordpress", "plugin"],
+	"homepage": "https://github.com/BenjaminMedia/wp-bcm-manager",
+	"authors": [{
+		"name": "Bonnier Publications",
+		"email": "interactive@bonnier.dk",
+		"homepage": "http://bonnierpublications.com"
+	}],
+	"support": {
+		"issues": "https://github.com/BenjaminMedia/wp-bcm-manager/issues",
+		"source": "https://github.com/BenjaminMedia/wp-bcm-manager"
+	},
+	"autoload": {
+		"psr-4": {
+			"Bonnier\\BCM\\": "src/Bonnier/BCM/"
+		}
+	},
+	"require": {
+		"php": ">=5.6"
+	}
+}
