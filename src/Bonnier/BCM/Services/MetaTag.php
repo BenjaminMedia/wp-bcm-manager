@@ -45,11 +45,6 @@ class MetaTag {
 				'bcm-type' => self::$objSettings->type
 			];
 			
-			// add subcategory tag
-			if (self::$objSettings->sub) {
-				$arrTags['bcm-sub'] = self::$objSettings->sub;
-			}
-			
 			// add tablet breaking point
 			if (self::$objSettings->tablet_breakpoint) {
 				$arrTags['bcm-tablet-breakpoint'] = self::$objSettings->tablet_breakpoint;
@@ -63,6 +58,11 @@ class MetaTag {
 			// we only apply article tags when necessary
 			if (!is_front_page() && (is_singular() || is_single())) {
 				$arrTags = array_merge($arrTags, self::get_article_tags());
+			}
+			
+			// add subcategory tag by overwriting if present
+			if (self::$objSettings->sub) {
+				$arrTags['bcm-sub'] = self::$objSettings->sub;
 			}
 			
 			// write the actual tags
@@ -85,6 +85,11 @@ class MetaTag {
 			$arrArticleTags['bcm-content-type'] = $strContentType;
 		}
 		
+		// set main category
+		if ($strMainCategory = self::get_article_category()) {
+			$arrArticleTags['bcm-sub'] = $strMainCategory;
+		}
+		
 		// set all categories
 		if ($arrCategories = self::get_bcm_categories()) {
 			$arrArticleTags['bcm-categories'] = implode(',', $arrCategories);
@@ -97,12 +102,12 @@ class MetaTag {
 		
 		// set advertorial type
 		if ($strAdvertorialType = self::get_bcm_advertorial_type()) {
-			$arrArticleTags['bcm-advertorial-type'] = implode(',', $strAdvertorialType);
+			$arrArticleTags['bcm-advertorial-type'] = $strAdvertorialType;
 		}
 		
 		// set advertorial label
 		if ($strAdvertorialLabel = self::get_bcm_advertorial_label()) {
-			$arrArticleTags['bcm-advertorial-label'] = implode(',', $strAdvertorialLabel);
+			$arrArticleTags['bcm-advertorial-label'] = $strAdvertorialLabel;
 		}
 		
 		return $arrArticleTags;
@@ -124,8 +129,7 @@ class MetaTag {
 	 * @return string
 	 */
 	private static function get_bcm_content_type() {
-		$strContentType = null;
-		return apply_filters('wp_bcm_set_content_type', $strContentType);
+		return apply_filters('wp_bcm_set_content_type', null);
 	}
 	
 	/**
@@ -134,8 +138,7 @@ class MetaTag {
 	 * @return string
 	 */
 	private static function get_bcm_advertorial_type() {
-		$strAdvertorialContentType = null;
-		return apply_filters('wp_bcm_set_advertorial_type', $strAdvertorialContentType);
+		return apply_filters('wp_bcm_set_advertorial_type', null);
 	}
 	
 	/**
@@ -144,8 +147,7 @@ class MetaTag {
 	 * @return string
 	 */
 	private static function get_bcm_advertorial_label() {
-		$strAdvertorialContentLabel = null;
-		return apply_filters('wp_bcm_set_advertorial_label', $strAdvertorialContentLabel);
+		return apply_filters('wp_bcm_set_advertorial_label', null);
 	}
 	
 	/**
@@ -154,16 +156,12 @@ class MetaTag {
 	 * @return array
 	 */
 	private static function get_bcm_categories() {
-		global $post;
-		
-		$arrCategories = [];
-		$arrPostCategories = wp_get_post_terms($post->ID, 'category');
-
-		foreach ($arrPostCategories as $arrCategory) {
-			$arrCategories[] = $arrCategory->name;
-		}
-		
-		return apply_filters('wp_bcm_set_categories', $arrCategories);
+		return apply_filters('wp_bcm_set_categories', array_map(function($objCategory) {
+					return $objCategory->name;
+				},
+				wp_get_post_terms(get_post()->ID, 'category')
+			)
+		);
 	}
 	
 	/**
@@ -172,16 +170,12 @@ class MetaTag {
 	 * @return array
 	 */
 	private static function get_bcm_tags() {
-		global $post;
-		
-		$arrTags = [];
-		$arrPostTags = wp_get_post_terms($post->ID, 'post_tag');
-		
-		foreach ($arrPostTags as $arrTag) {
-			$arrTags[] = $arrTag->name;
-		}
-		
-		return apply_filters('wp_bcm_set_tags', $arrTags);
+		return apply_filters('wp_bcm_set_tags', array_map(function($objTag) {
+					return $objTag->name;
+				},
+				wp_get_post_terms(get_post()->ID, 'post_tag')
+			)
+		);
 	}
 	
 	/**
@@ -194,5 +188,41 @@ class MetaTag {
 		foreach ($arrTags as $strKey => $strValue) {
 			echo '<meta name="' . $strKey . '" content="' . trim($strValue) . '" />' . PHP_EOL;
 		}
+	}
+
+	/**
+	 * Get main category of a post
+	 *
+	 * @return string|null
+	 */
+	private static function get_article_category() {
+		$arrCategories = get_the_category();
+
+		if (isset($arrCategories[0])) {
+			if ($arrCategories[0]->parent) {
+				return self::get_top_category($arrCategories[0]->cat_ID);
+			}
+
+			return $arrCategories[0]->name;
+		}
+		return null;
+	}
+
+	/**
+	 * Get top category name based on category id
+	 *
+	 * @param integer $intCategoryId
+	 * @return string
+	 */
+	private function get_top_category($intCategoryId) {
+		$strTopName = null;
+
+		while ($intCategoryId) {
+			$objCategory = get_category($intCategoryId);
+			$intCategoryId = $objCategory->category_parent;
+			$strTopName = $objCategory->name;
+		}
+
+		return $strTopName;
 	}
 }
