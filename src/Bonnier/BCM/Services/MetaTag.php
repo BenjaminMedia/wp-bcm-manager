@@ -138,24 +138,6 @@ class MetaTag {
 	}
 	
 	/**
-	 * Get advertorial content type
-	 *
-	 * @return string
-	 */
-	private static function get_bcm_advertorial_type() {
-		return apply_filters('wp_bcm_set_advertorial_type', null);
-	}
-	
-	/**
-	 * Get advertorial content label
-	 *
-	 * @return string
-	 */
-	private static function get_bcm_advertorial_label() {
-		return apply_filters('wp_bcm_set_advertorial_label', null);
-	}
-	
-	/**
 	 * Get array of categories name from post
 	 *
 	 * @return array
