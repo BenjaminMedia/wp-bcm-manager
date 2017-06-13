@@ -57,17 +57,7 @@ class MetaTag {
 
 			// set content type
 			if ($strContentType = self::get_bcm_content_type()) {
-				$arrArticleTags['bcm-content-type'] = $strContentType;
-			}
-
-			// set advertorial type
-			if ($strAdvertorialType = self::get_bcm_advertorial_type()) {
-				$arrArticleTags['bcm-advertorial-type'] = $strAdvertorialType;
-			}
-
-			// set advertorial label
-			if ($strAdvertorialLabel = self::get_bcm_advertorial_label()) {
-				$arrArticleTags['bcm-advertorial-label'] = $strAdvertorialLabel;
+				$arrTags['bcm-content-type'] = $strContentType;
 			}
 
 			// we only apply article tags when necessary
@@ -108,6 +98,21 @@ class MetaTag {
 		// set all tags
 		if ($arrTags = self::get_bcm_tags()) {
 			$arrArticleTags['bcm-tags'] = implode(',', $arrTags);
+		}
+
+		if (function_exists('get_fields')) {
+			$arrFields = get_fields(get_post()->ID);
+
+			// overwrite any previous content type
+			if (isset($arrFields['kind']) && $arrFields['kind']) {
+				$arrArticleTags['bcm-content-type'] = $arrFields['kind'];
+			}
+
+			// set advertorial type and label
+			if (isset($arrFields['commercial_type']) && $arrFields['commercial_type']) {
+				$arrArticleTags['bcm-advertorial-type'] = $arrFields['commercial_type'];
+				$arrArticleTags['bcm-advertorial-label'] = pll__($arrFields['commercial_type']);
+			}
 		}
 
 		return $arrArticleTags;
