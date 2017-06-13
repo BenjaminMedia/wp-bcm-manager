@@ -13,11 +13,11 @@ In order to generate the following meta tags this plugin must be enabled from th
 - `bcm-tablet-breakpoint` - __optional__ - can be set in settings page
 - `bcm-mobile-breakpoint` - __optional__ - can be set in settings page
 - `bcm-title` - automatically fetched on article page and overwritten by filter `wp_bcm_set_title`
-- `bcm-content-type` - this must be explicity set by filter `wp_bcm_set_content_type`
+- `bcm-content-type` - this will be fetched automatically and corresponds to get_fields(get_post()->ID)['kind']
 - `bcm-categories` - automatically fetched on article page and overwritten by filter `wp_bcm_set_categories`
 - `bcm-tags` - automatically fetched on article page and overwritten by filter `wp_bcm_set_tags`
-- `bcm-advertorial-type` - this must be explicity set by filter `wp_bcm_set_advertorial_type`
-- `bcm-advertorial-label` - this must be explicity set by filter `wp_bcm_set_advertorial_label`
+- `bcm-advertorial-type` - this will be fetched automatically and corresponds to get_fields(get_post()->ID)['commercial_type']
+- `bcm-advertorial-label` - this will be fetched automatically and corresponds to pll__(get_fields(get_post()->ID)['commercial_type'])
 
 
 #### Inclusion script
@@ -60,21 +60,5 @@ add_filter('wp_bcm_set_tags', function($arrTags) {
 add_filter('wp_bcm_set_content_type', function($strContentType) {
 	// tamper content type
 	return $strContentType;
-});
-```
-
-- __wp_bcm_set_advertorial_type__
-``` php
-add_filter('wp_bcm_set_advertorial_type', function($strAdvertorialContentType) {
-	// tamper advertorial content type
-	return $strAdvertorialContentType;
-});
-```
-
-- __wp_bcm_set_advertorial_label__
-``` php
-add_filter('wp_bcm_set_advertorial_label', function($strAdvertorialContentLabel) {
-	// tamper advertorial content label
-	return $strAdvertorialContentLabel;
 });
 ```
