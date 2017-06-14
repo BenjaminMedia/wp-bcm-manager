@@ -19,6 +19,8 @@ In order to generate the following meta tags this plugin must be enabled from th
 - `bcm-advertorial-type` - this will be fetched automatically and corresponds to get_fields(get_post()->ID)['commercial_type']
 - `bcm-advertorial-label` - this will be fetched automatically and corresponds to pll__(get_fields(get_post()->ID)['commercial_type'])
 
+__Note__: The 'commercial_type' field values are presumed to have been registered as string translations.
+
 
 #### Inclusion script
 
