@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP BCM Manager
- * Version: 1.0.0
+ * Version: 1.1.2
  * Plugin URI: https://github.com/BenjaminMedia/wp-bcm-manager
  * Description: This plugin integrates Bonnier Commercial Manager script into your website
  * Author: Bonnier
