@@ -29,7 +29,7 @@ class SettingsPage {
 	private $arrFields = [
 		'enabled' => [
 			'type' => 'checkbox',
-			'name' => 'Enabled? This will still show all the BCM tags, but disable the banners themselves',
+			'name' => 'Enable banners (BCM tags are always shown)',
 		],
 		'type' => [
 			'type' => 'text',
