@@ -206,7 +206,7 @@ class SettingsPage {
 		}
 
 		if (isset($this->arrSettingsValues[$strKey]) && !empty($this->arrSettingsValues[$strKey])) {
-			return $this->arrSettingsValues[$strKey];
+			return apply_filters('wp_bcm_option_'.$strKey, $this->arrSettingsValues[$strKey]);
 		}
 
 		return null;
