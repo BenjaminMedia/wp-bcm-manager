@@ -35,44 +35,41 @@ class MetaTag {
 	 * @return null
 	 */
 	public static function add_head_tags() {
-		
-		if (self::$objSettings->enabled) {
 
-			// add mandatory tags
-			$arrTags = [
-				'bcm-brand' => self::$objSettings->brand,
-				'bcm-country' => self::$objSettings->country,
-				'bcm-type' => self::$objSettings->type
-			];
+        // add mandatory tags
+        $arrTags = [
+            'bcm-brand' => self::$objSettings->brand,
+            'bcm-country' => self::$objSettings->country,
+            'bcm-type' => self::$objSettings->type
+        ];
 
-			// add tablet breaking point
-			if (self::$objSettings->tablet_breakpoint) {
-				$arrTags['bcm-tablet-breakpoint'] = self::$objSettings->tablet_breakpoint;
-			}
+        // add tablet breaking point
+        if (self::$objSettings->tablet_breakpoint) {
+            $arrTags['bcm-tablet-breakpoint'] = self::$objSettings->tablet_breakpoint;
+        }
 
-			// add mobile breaking point
-			if (self::$objSettings->mobile_breakpoint) {
-				$arrTags['bcm-mobile-breakpoint'] = self::$objSettings->mobile_breakpoint;
-			}
+        // add mobile breaking point
+        if (self::$objSettings->mobile_breakpoint) {
+            $arrTags['bcm-mobile-breakpoint'] = self::$objSettings->mobile_breakpoint;
+        }
 
-			// set content type
-			if ($strContentType = self::get_bcm_content_type()) {
-				$arrTags['bcm-content-type'] = $strContentType;
-			}
+        // set content type
+        if ($strContentType = self::get_bcm_content_type()) {
+            $arrTags['bcm-content-type'] = $strContentType;
+        }
 
-			// we only apply article tags when necessary
-			if (!is_front_page() && (is_singular() || is_single())) {
-				$arrTags = array_merge($arrTags, self::get_article_tags());
-			}
+        // we only apply article tags when necessary
+        if (!is_front_page() && (is_singular() || is_single())) {
+            $arrTags = array_merge($arrTags, self::get_article_tags());
+        }
 
-			// add subcategory tag by overwriting if present
-			if (self::$objSettings->sub) {
-				$arrTags['bcm-sub'] = self::$objSettings->sub;
-			}
+        // add subcategory tag by overwriting if present
+        if (self::$objSettings->sub) {
+            $arrTags['bcm-sub'] = self::$objSettings->sub;
+        }
 
-			// write the actual tags
-			self::write_meta_tags($arrTags);
-		}
+        // write the actual tags
+        self::write_meta_tags($arrTags);
 	}
 	
 	/**
