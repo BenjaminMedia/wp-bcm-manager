@@ -119,6 +119,13 @@ class SettingsPage {
 	 * @return null
 	 */
 	public function register_settings() {
+        // Push country setting if polylang is not installed
+        if(!function_exists('pll_current_language')) {
+            $this->arrFields['country'] = [
+                'type' => 'text',
+                'name' => 'Country code ie. (dk|se|no|fi)'
+            ];
+        }
 
 		register_setting(
 			self::SETTINGS_GROUP, // Option group
@@ -221,7 +228,7 @@ class SettingsPage {
 	 */
 	public function __get($strKey) {
 		
-		if ($strKey == 'country') {
+		if ($strKey == 'country' && !isset($this->arrFields['country'])) {
 			return Locale::get_instance()->get_country();
 		}
 		
