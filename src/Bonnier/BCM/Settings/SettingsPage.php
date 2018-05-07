@@ -228,7 +228,7 @@ class SettingsPage {
 	 */
 	public function __get($strKey) {
 		
-		if ($strKey == 'country' && !isset($this->arrFields['country'])) {
+		if ($strKey == 'country' && !$this->get_setting_value($strKey)) {
 			return Locale::get_instance()->get_country();
 		}
 		
