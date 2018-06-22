@@ -63,6 +63,10 @@ class MetaTag {
             $arrTags = array_merge($arrTags, self::get_article_tags());
         }
 
+        if(is_category()) {
+            $arrTags = array_merge($arrTags, self::get_category_tags());
+        }
+
         // add subcategory tag by overwriting if present
         if (self::$objSettings->sub) {
             $arrTags['bcm-sub'] = self::$objSettings->sub;
@@ -209,4 +213,29 @@ class MetaTag {
 
 		return $strTopName;
 	}
+
+	private static function get_category_parents(\WP_Term $category, $parents = []) {
+	    if(($parent = get_category($category->parent)) && !is_wp_error($parent)) {
+	        $parents[] = $parent;
+	        return static::get_category_parents($parent, $parents);
+        }
+        return $parents;
+    }
+
+    private static function get_category_tags()
+    {
+        $category = get_queried_object();
+        $parents = static::get_category_parents($category);
+        $metaTags = [];
+        $categories = apply_filters('wp_bcm_set_categories', array_map(function($objCategory) {
+                return $objCategory->name;
+            },
+                array_merge([$category], $parents)
+            )
+        );
+        $metaTags['bcm-categories'] = implode(',', $categories);
+        $metaTags['bcm-content-type'] = 'category';
+        $metaTags['bcm-title'] = $category->name;
+        return $metaTags;
+    }
 }
