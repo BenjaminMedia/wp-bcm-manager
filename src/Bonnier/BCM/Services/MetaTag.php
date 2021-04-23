@@ -10,7 +10,7 @@ use Bonnier\BCM\Settings\SettingsPage;
  * MetaTag class
  */
 class MetaTag {
-	
+
 	/**
 	 * Settings object
 	 *
@@ -58,6 +58,11 @@ class MetaTag {
             $arrTags['bcm-content-type'] = $strContentType;
         }
 
+		// set advertorial article type
+		if ($strAdvertorialType = self::get_bcm_advertorial_type()) {
+			$arrTags = array_merge($arrTags, $strAdvertorialType);
+		}
+
         // we only apply article tags when necessary
         if (!is_front_page() && (is_singular() || is_single())) {
             $arrTags = array_merge($arrTags, self::get_article_tags());
@@ -75,7 +80,7 @@ class MetaTag {
         // write the actual tags
         self::write_meta_tags($arrTags);
 	}
-	
+
 	/**
 	 * Get specific article meta tags
 	 *
@@ -90,12 +95,12 @@ class MetaTag {
 		if ($strMainCategory = self::get_article_category()) {
 			$arrArticleTags['bcm-sub'] = $strMainCategory;
 		}
-		
+
 		// set all categories
 		if ($arrCategories = self::get_bcm_categories()) {
 			$arrArticleTags['bcm-categories'] = implode(',', $arrCategories);
 		}
-		
+
 		// set all tags
 		if ($arrTags = self::get_bcm_tags()) {
 			$arrArticleTags['bcm-tags'] = implode(',', $arrTags);
@@ -118,7 +123,7 @@ class MetaTag {
 
 		return $arrArticleTags;
 	}
-	
+
 	/**
 	 * Get title from post
 	 *
@@ -128,7 +133,7 @@ class MetaTag {
 		global $post;
 		return apply_filters('wp_bcm_set_title', $post->post_title);
 	}
-	
+
 	/**
 	 * Get content type
 	 *
@@ -137,7 +142,16 @@ class MetaTag {
 	private static function get_bcm_content_type() {
 		return apply_filters('wp_bcm_set_content_type', null);
 	}
-	
+
+	/**
+	 * Get advertorial type
+	 *
+	 * @return array
+	 */
+	private static function get_bcm_advertorial_type() {
+		return apply_filters('wp_bcm_set_advertorial_type', null );
+	}
+
 	/**
 	 * Get array of categories name from post
 	 *
@@ -151,7 +165,7 @@ class MetaTag {
 			)
 		);
 	}
-	
+
 	/**
 	 * Get array of tags from post
 	 *
@@ -165,7 +179,7 @@ class MetaTag {
 			)
 		);
 	}
-	
+
 	/**
 	 * Generate a meta tag
 	 *

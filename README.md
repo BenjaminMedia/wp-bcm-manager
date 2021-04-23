@@ -64,3 +64,11 @@ add_filter('wp_bcm_set_content_type', function($strContentType) {
 	return $strContentType;
 });
 ```
+
+- __wp_bcm_set_advertorial_type__
+``` php
+add_filter('wp_bcm_set_advertorial_type', function($arrTags) {
+	// tamper advertorial type
+	return $arrTags;
+});
+```
